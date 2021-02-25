@@ -21,6 +21,8 @@ from helpers import cd_to_datetime, datetime_to_str
 
 
 class NearEarthObject:
+    _all_objects = dict()
+    _counter = 0
     """A near-Earth object (NEO).
 
     An NEO encapsulates semantic and physical parameters about the object, such
