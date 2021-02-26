@@ -1,23 +1,26 @@
-# Explore Close Approaches of Near-Earth Objects
-
-In this project, you'll use Python - and the skills we've developed throughout this course - to search for and explore close approaches of near-Earth objects (NEOs), using data from NASA/JPL's Center for Near Earth Object Studies.
+# Expected Noticable Close Approaches of Near-Earth Objects in 2021
+The project uses data from two different data sources and it seemed warranted to start with in-depth visual exploratory data analysis and, also, merge the data to better understand what objects could be visiable this year. 
 
 ## Overview
+Specifically, it was hypothesized that albedo, relative brightness, and estimated diameter, could help determine what potentially hazardous asteroids could be visible in the nearest future. 
+(Scatterplot albedo/diameter_)
 
-At a high-level, you'll create Python code that implements a command-line tool to inspect and query a dataset of NEOs and their close approaches to Earth.
+### Albedo
+Relative brightness feature seems to be concentrated around 0.07-0.3 range with only a few rare outliers above 0.5. Objects with value about 0.3 should be considered exceptionally bright.
+(Boxplot albedo)
 
-Concretely, you'll have to read data from both a CSV file and a JSON file, convert that data into structured Python objects, perform filtering operations on the data, limit the size of the result set, and write the results to a file in a structured format, such as CSV or JSON.
+### Diameter
+Size feature as measured by estimated diameter has more outliers, starting from values of around 0.5. Therefore, objects larger than 0.5 could also be considered relatively noticeable.
+(Boxplot diameter)
 
-When complete, you'll be able to inspect the properties of the near-Earth objects in the data set and query the data set of close approaches to Earth using any combination of the following filters:
+### Distance
+For close approaches the situation is different as the sample already contains potentially hazardous objects that come close by definition. It seems that the cut of point was set at 0.5 and no outliers were included. Approaches with distance smaller than 0.2 should be considered as very close.  
+(Boxplot dist)
 
-- Occurs on a given date.
-- Occurs on or after a given start date.
-- Occurs on or before a given end date.
-- Approaches Earth at a distance of at least (or at most) X astronomical units.
-- Approaches Earth at a relative velocity of at least (or at most) Y kilometers per second.
-- Has a diameter that is at least as large as (or at least as small as) Z kilometers.
-- Is marked by NASA as potentially hazardous (or not).
+### Speed
+In order to get an idea of what should be generally expected from approach speed, distribution of relative velocity feature was analyzed. Normal speeds of approach should be around 10-20, although the dataset contains a lot of outliers. 
+(Boxplot v_rel)
 
-### Learning Objectives
-
-By completing this project, you'll have demonstrated an ability to:
+### Expected this year
+Finally, close approaches dataset was sorted for 2021 expected dates and joined with objects dataset on unique identifiers associated with potentially hazardous objects. This resulted in `exp_pha_df` table with 56 objects that may be visible during the year. Noteworthy is the object pdes=523664, with medium size of 0.346 and outstanding brightness of 0.536, for example. Apparently, it is approaching every 3 years and is expected to come back as close as 0.10 again on 2021-Jul-25 22:09.
+(Bubble plot)
