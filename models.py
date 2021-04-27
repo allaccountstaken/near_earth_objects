@@ -14,7 +14,7 @@ class NearEarthObject:
     `NEODatabase` constructor.
     """
 
-    def __init__(self, designation, name=None, diameter=float('nan'), hazardous=False):
+    def __init__(self, designation, name=None, diameter=float('nan'), hazardous='N'):
         """Create a new `NearEarthObject`.
 
         :param info: 
@@ -42,22 +42,26 @@ class NearEarthObject:
     def hazard(self):
         """Return 'is/is not' depending on boolean value of hazardous."""
 
-        if self.hazardous:
-            hazard = 'is'
-        else:
+        if self.hazardous == 'N':
             hazard = 'is not'
+        else:
+            hazard = 'is'
         return hazard
 
     def __str__(self):
         """Return `str(self)`."""
 
-        return f"NEO {self.fullname} has a diameter {self.diameter} km and {self.hazard} potentially hazardous."
+        formatted_string = "NEO {} has a diameter {} km and {} potentially hazardous.".format(
+            self.fullname, self.diameter, self.hazard
+        )
 
-    def __repr__(self):
-        """Return `repr(self)`, a computer-readable string representation of this object."""
+        return formatted_string
 
-        return (f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, "
-                f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})")
+    def __hash__(self):
+        return hash(str(self))
+
+    def __eq__(self, neo):
+        return self.designation is neo.designation
 
 
 class CloseApproach:
@@ -74,7 +78,7 @@ class CloseApproach:
     `NEODatabase` constructor.
     """
 
-    def __init__(self, neo, time, distance=float('nan'), velocity=float('nan')):
+    def __init__(self, des, time, distance=float('nan'), velocity=float('nan'), neo=None):
         """Create a new `CloseApproach`.
 
         :param info: 
@@ -83,12 +87,11 @@ class CloseApproach:
         optional: distance (float), velocity (bool), neo (neo).
         """
 
-        self.neo = neo
-        self._designation = neo.designation
+        self._designation = des
         self.time = cd_to_datetime(time)
-
         self.distance = distance
         self.velocity = velocity
+        self.neo = neo
 
     @property
     def time_str(self):
@@ -108,10 +111,30 @@ class CloseApproach:
 
     def __str__(self):
         """Return `str(self)`."""
-        return (f"At {self.time_str} {self.neo.fullname}, "
-                f"approaching with speed {self.velocity} and distance {self.distance}")
+
+        formatted_string = "- On {} NEO {} approaching with speed {} km/s and distance {} au.".format(
+            self.time_str, self.neo.fullname, self.velocity, self.distance
+        )
+
+        return formatted_string
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
-        return (f"CloseApproach(time={self.time_str}, distance={self.distance:.2f}, "
-                f"velocity={self.velocity:.2f}, neo={self.neo!r})")
+
+        formatted_string = "CloseApproach(time={}, distance={}, velocity={}, neo={})".format(
+            self.time_str, self.distance, self.velocity, self.neo)
+
+        return formatted_string
+
+
+# Testing -- all works well here
+# n = NearEarthObject(123, 'Barsik', 21.21, True)
+# cap1 = CloseApproach(123, '1900-Dec-27 12:12', 10, 0.1, n)
+# cap2 = CloseApproach(123, '1910-Dec-27 12:12', 11, 1.1, n)
+
+# print(cap1, cap2)
+
+# n.approaches.append(cap1)
+# n.approaches.append(cap2)
+
+# print(n.approaches)
